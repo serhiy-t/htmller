@@ -1,0 +1,1 @@
+set :test, :query => '//node', :value => :text
