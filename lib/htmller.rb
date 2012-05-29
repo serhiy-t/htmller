@@ -31,7 +31,7 @@ module Htmller
       @root = Scope.new
       @context = []
 
-      @root.node = Nokogiri::HTML(@source)
+      @root.node = ::Nokogiri::HTML(@source)
       @root.obj = {}
 
       push_context @root.node, @root.obj

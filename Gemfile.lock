@@ -2,7 +2,8 @@ PATH
   remote: .
   specs:
     htmller (0.0.1)
-      rails (~> 3.2.3)
+      nokogiri
+      rails
 
 GEM
   remote: http://rubygems.org/
