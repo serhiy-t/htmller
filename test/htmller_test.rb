@@ -39,6 +39,17 @@ class HtmllerTest < ActiveSupport::TestCase
     assert_equal 'hello, world', hash[:testnode][:innernode]
   end
 
+  test "Text node postprocessing" do
+    hash = Htmller.build_hash "
+    hash :testnode, :query => '//node' do
+      text :innernode, :query => '//innernode' do |value|
+        value + '!'
+      end
+    end
+                              ", '<node><innernode>hello, world</innernode></node>'
+    assert_equal 'hello, world!', hash[:testnode][:innernode]
+  end
+
   test "Constant node in hash node" do
     hash = Htmller.build_hash "
     set :testnode, :query => '//node', :value => :hash do

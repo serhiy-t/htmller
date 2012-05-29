@@ -90,20 +90,42 @@ module Htmller
       end
     end
 
+    def list field, params = {}, &block
+      set field, params.merge({:value => :list}), &block
+    end
+
+    def hash field, params = {}, &block
+      set field, params.merge({:value => :hash}), &block
+    end
+
+    def text field, params = {}, &block
+      set field, params.merge({:value => :text}), &block
+    end
+
+    def block field, params = {}, &block
+      set field, params.merge({:value => :block}), &block
+    end
+
     def set field, params = {}, &block
       result = calc_object params, &block
+      result_ok = (not result.nil?)
 
-      unless result.nil?
+      if result_ok
         context.obj[field] = result
       end
+
+      result_ok
     end
 
     def push params = {}, &block
       result = calc_object params, &block
+      result_ok = (not result.nil?)
 
-      unless result.nil?
+      if result_ok
         context.obj.push result
       end
+
+      result_ok
     end
 
     private
@@ -152,6 +174,11 @@ module Htmller
           end
         elsif params[:value] == :text
           result = query_result.first.text
+
+          if block_given?
+            result = yield result
+          end
+
         elsif params[:value] == :block
           unless block_given?
             HtmllerException.raise_with_message 'No block provided'
