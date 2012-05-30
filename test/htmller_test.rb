@@ -87,4 +87,12 @@ class HtmllerTest < ActiveSupport::TestCase
 
     assert_equal 'hello', hash[:test]
   end
+
+  test "Get info from attribute" do
+    hash = Htmller.build_hash "
+      set :testnode, :query => '//node', :value => :attr_id
+                              ", '<node id="hello">hello, world</node>'
+    assert_equal String, hash[:testnode].class
+    assert_equal 'hello', hash[:testnode]
+  end
 end

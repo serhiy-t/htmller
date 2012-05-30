@@ -139,7 +139,7 @@ module Htmller
 
       params[:query] ||= '.'
 
-      unless params.has_key? :value or (not ([:hash, :list, :text].include? params[:value]))
+      unless params.has_key? :value and ((params[:value].to_s.start_with? 'attr_') or ([:hash, :list, :text, :block].include? params[:value]))
         HtmllerException.raise_with_message 'Unknown value type'
       end
 
@@ -172,8 +172,17 @@ module Htmller
               yield
             end
           end
+
         elsif params[:value] == :text
           result = query_result.first.text
+
+          if block_given?
+            result = yield result
+          end
+
+        elsif params[:value].to_s.start_with? 'attr_'
+          attribute_name = params[:value].to_s[5..-1]
+          result = query_result.first.attribute(attribute_name).value
 
           if block_given?
             result = yield result
